@@ -4,21 +4,24 @@ import {
   Routes, Route, Link, 
   useNavigate, useMatch
 } from 'react-router-dom'
+import { Table, Form, Button, Alert, Navbar, Nav } from 'react-bootstrap'
 
 const AnecdoteList = ({ anecdotes }) => {
   return(
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => {
-        console.log(anecdote.content)
-        return(
-        <li key={anecdote.id}>
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-        </li>)}
-        )
-      }
-    </ul>
+    <Table striped>
+      <tbody>
+        {anecdotes.map(anecdote => {
+          console.log(anecdote.content)
+          return(
+          <tr key={anecdote.id}>
+            <td><Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link></td>
+          </tr>)}
+          )
+        }
+      </tbody>
+    </Table>
   </div>
  )
 }
@@ -91,31 +94,31 @@ const CreateNew = (props) => {
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input 
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>content</Form.Label>
+          <Form.Control
           value={text.value} 
           type={text.type}
           onChange={text.onChange}/>
-        </div>
-        <div>
-          author
-          <input
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>author</Form.Label>
+          <Form.Control
           value={author.value} 
           type={author.type}
           onChange={author.onChange}/>
-        </div>
-        <div>
-          url for more info
-          <input
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>url for more info</Form.Label>
+          <Form.Control
           value={info.value} 
           type={info.type}
           onChange={info.onChange}/>
-        </div>
-        <button type='submit'>create</button>
-        <button type='button' onClick={inputReset}>reset</button>
-      </form>
+        </Form.Group>
+        <Button type='submit'>create</Button>
+        <Button type='button' onClick={inputReset}>reset</Button>
+      </Form>
     </div>
   )
 }
@@ -125,9 +128,9 @@ const App = () => {
   const padding = {
     padding: 5
   }
-  const color = {
-    color: 'red'
-  }
+  // const color = {
+  //   color: 'red'
+  // }
 
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -173,14 +176,26 @@ const App = () => {
   // }
 
   return (
-    <div>
+    <div className="container">
       <h1>Software anecdotes</h1>
-      <div>
-        <Link to="/" style={padding}>anecdotes</Link>
-        <Link to="/create" style={padding}>create new</Link>
-        <Link to="/about" style={padding}>about</Link>
-      </div>
-      <p style={color}>{notification}</p>
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="#" as="span">
+              <Link to="/" style={padding}>anecdotes</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link to="/create" style={padding}>create new</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link to="/about" style={padding}>about</Link>
+            </Nav.Link>            
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+
+      {(notification)&&<Alert variant="success">{notification}</Alert>}      
       <Routes>
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
         <Route path="/about" element={<About/>}></Route>
